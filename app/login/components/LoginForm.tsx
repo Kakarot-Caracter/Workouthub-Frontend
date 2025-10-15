@@ -42,11 +42,17 @@ const LoginForm = () => {
       }
 
       router.push("/");
-    } catch (err: any) {
-      const msg =
-        (typeof err === "string" && err) ||
-        err?.message ||
-        "Error del servidor. Intenta más tarde.";
+    } catch (err: unknown) {
+      // obtenemos un mensaje seguro
+      let msg: string = "Error del servidor. Intenta más tarde.";
+
+      if (typeof err === "string") {
+        msg = err;
+      } else if (err instanceof Error) {
+        msg = err.message;
+      }
+
+      // chequeo de errores de autenticación
       if (
         msg.toLowerCase().includes("401") ||
         msg.toLowerCase().includes("unauthorized") ||
@@ -57,6 +63,7 @@ const LoginForm = () => {
           message: "Credenciales inválidas.",
         });
       }
+
       setServerError(msg);
     }
   };

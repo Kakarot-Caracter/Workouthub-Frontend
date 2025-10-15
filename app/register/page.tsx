@@ -1,4 +1,3 @@
-import { User, ArrowRight } from "lucide-react";
 import RegisterForm from "./components/RegisterForm";
 
 const Register = () => {

@@ -24,11 +24,10 @@ export default function ConfirmDeleteExerciseModal({
 }: ConfirmDeleteExerciseModalProps) {
   const deleteMutation = useDeleteExercise();
 
-  // Defensive extraction of loading state:
-  // - prefer mutate.isLoading (common)
-  // - fallback to mutate.isPending (some versions)
-  // - fallback to status === "pending" (correct status value)
-  const mutAny = deleteMutation as any;
+  const mutAny = deleteMutation as unknown as {
+    isLoading?: boolean;
+    isPending?: boolean;
+  };
   const isLoading =
     typeof mutAny.isLoading === "boolean"
       ? mutAny.isLoading
@@ -80,7 +79,7 @@ export default function ConfirmDeleteExerciseModal({
         <div className="mb-4">
           <p className="text-slate-600 mb-2">
             ¿Estás seguro de que quieres eliminar el ejercicio{" "}
-            <span className="font-semibold text-slate-900">"{itemName}"</span>?
+            <span className="font-semibold text-slate-900">{itemName}</span>?
           </p>
           <p className="text-sm text-slate-500">
             Esta acción no se puede deshacer.
@@ -94,7 +93,7 @@ export default function ConfirmDeleteExerciseModal({
               <span className="text-sm font-medium">Error al eliminar</span>
             </div>
             <p className="text-sm text-red-600 mt-1">
-              {(deleteMutation.error as any)?.message ||
+              {(deleteMutation.error as Error)?.message ||
                 "Ocurrió un error inesperado"}
             </p>
           </div>

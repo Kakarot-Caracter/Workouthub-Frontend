@@ -49,10 +49,10 @@ const RegisterForm = () => {
       }
 
       router.push("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       const msg =
+        (err instanceof Error && err.message) ||
         (typeof err === "string" && err) ||
-        err?.message ||
         "Error del servidor. Intenta más tarde.";
       // intenta mapear a campo si el mensaje lo sugiere
       if (

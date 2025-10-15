@@ -15,10 +15,16 @@ interface ExerciseFormModalProps {
 
 interface FormData {
   name: string;
-
   sets: string;
   reps: string;
   weight: string;
+}
+
+interface ExerciseData {
+  name: string;
+  sets?: number;
+  reps?: number;
+  weight?: number;
 }
 
 // Helper function to safely parse integers
@@ -36,7 +42,6 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
 }) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
-
     sets: "",
     reps: "",
     weight: "",
@@ -53,7 +58,6 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
       if (exercise) {
         setFormData({
           name: exercise.name || "",
-
           sets: exercise.sets?.toString() || "",
           reps: exercise.reps?.toString() || "",
           weight: exercise.weight?.toString() || "",
@@ -61,7 +65,6 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
       } else {
         setFormData({
           name: "",
-
           sets: "",
           reps: "",
           weight: "",
@@ -82,7 +85,7 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
     if (!formData.name.trim()) return;
 
     // Safely parse numeric fields and remove undefined values
-    const exerciseData: any = {
+    const exerciseData: ExerciseData = {
       name: formData.name.trim(),
     };
 
@@ -117,7 +120,7 @@ export const ExerciseFormModal: React.FC<ExerciseFormModalProps> = ({
         });
       }
       onClose();
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error al guardar ejercicio:", error);
     }
   };

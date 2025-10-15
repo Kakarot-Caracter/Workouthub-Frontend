@@ -14,7 +14,7 @@ export default function ConfirmDeleteModalRoutine({
   open,
   onClose,
   onConfirm,
-  routineName,
+
   isDeleting = false,
 }: ConfirmDeleteModalProps) {
   if (!open) return null;

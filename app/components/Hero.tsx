@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  ArrowBigRight,
-  ArrowRight,
-  Download,
-  MessageCircle,
-  User,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -21,20 +16,20 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
+          <Link
             href="/rutinas"
             className="inline-flex items-center justify-center gap-2 bg-blue-950  text-white font-medium py-3 px-6 rounded-lg transition-colors"
           >
             Comenzar Ahora
             <ArrowRight size={20} />
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/rutinas"
             className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-gray-800 font-medium py-3 px-6 rounded-lg border border-gray-300 transition-colors"
           >
             Ver Rutinas
-          </a>
+          </Link>
         </div>
       </div>
     </section>

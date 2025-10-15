@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowRight, Target, TrendingUp, Users } from "lucide-react";
+import { Target, TrendingUp, Users } from "lucide-react";
 
 const KeyFeatures = () => {
   const features = [

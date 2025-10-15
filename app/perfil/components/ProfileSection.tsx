@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Pencil, Check } from "lucide-react";
-import { useUsers } from "../hooks/users/useUser"; // ajusta la ruta si es necesario
-import { useUpdateUser } from "../hooks/users/useUpdateUser"; // ajusta la ruta si es necesario
+import { useUsers } from "../hooks/users/useUser";
+import { useUpdateUser } from "../hooks/users/useUpdateUser";
 import CaloriesCalculator from "./CaloriesCalculator";
 import type { UserI } from "@/app/shared/types";
 
@@ -14,6 +14,35 @@ type ProfileData = {
   gender: string;
   weeklyActivity: string;
 };
+
+// Tipo para el payload de actualización usando los tipos de UserI
+type UpdatePayload = Partial<
+  Pick<UserI, "height" | "age" | "weight" | "gender" | "weeklyActivity">
+>;
+
+// Tipo para las opciones de select
+type SelectOption = {
+  value: string;
+  label: string;
+};
+
+// Tipos para los campos del formulario
+type BaseField = {
+  label: string;
+  key: keyof ProfileData;
+};
+
+type InputField = BaseField & {
+  type?: never;
+  options?: never;
+};
+
+type SelectField = BaseField & {
+  type: "select";
+  options: SelectOption[];
+};
+
+type Field = InputField | SelectField;
 
 export default function ProfileSection() {
   const { data, isLoading, isError, error } = useUsers();
@@ -40,9 +69,7 @@ export default function ProfileSection() {
       height: user.height != null ? String(user.height) : "",
       age: user.age != null ? String(user.age) : "",
       weight: user.weight != null ? String(user.weight) : "",
-      // Normalizamos gender a minúsculas para evitar errores de validación
       gender: user.gender ? String(user.gender).toLowerCase() : "",
-      // weeklyActivity lo dejamos tal cual (prisma devuelve por ejemplo "LIGHT")
       weeklyActivity: user.weeklyActivity ?? "",
     });
   }, [user]);
@@ -54,21 +81,20 @@ export default function ProfileSection() {
     setEditField(null);
     setSavingField(key);
 
-    const payload: Record<string, any> = {};
+    const payload: UpdatePayload = {};
 
     if (key === "height" || key === "age" || key === "weight") {
       payload[key] = profile[key] === "" ? null : Number(profile[key]);
     } else if (key === "gender") {
-      // Enviamos exactamente "male" o "female" (o null)
-      payload[key] = profile[key] ? String(profile[key]).toLowerCase() : null;
+      payload[key] = profile[key]
+        ? (String(profile[key]).toLowerCase() as UserI["gender"])
+        : null;
     } else if (key === "weeklyActivity") {
-      // Aseguramos el formato que espera el backend (ej: "LIGHT")
-      payload[key] = profile[key] ? String(profile[key]).toUpperCase() : null;
-    } else {
-      payload[key] = profile[key];
+      payload[key] = profile[key]
+        ? (String(profile[key]).toUpperCase() as UserI["weeklyActivity"])
+        : null;
     }
 
-    // DEBUG: ver qué se va a enviar
     console.log("Payload a enviar:", payload);
 
     try {
@@ -95,7 +121,7 @@ export default function ProfileSection() {
   if (isError) return <div>Error: {error?.message}</div>;
   if (!user) return <div>No se encontró usuario.</div>;
 
-  const fields = [
+  const fields: Field[] = [
     { label: "Altura (cm)", key: "height" },
     { label: "Edad", key: "age" },
     { label: "Peso (kg)", key: "weight" },
@@ -118,7 +144,7 @@ export default function ProfileSection() {
         { value: "INTENSE", label: "6-7 veces/semana" },
       ],
     },
-  ] as const;
+  ];
 
   return (
     <div>
@@ -140,14 +166,14 @@ export default function ProfileSection() {
 
               {isEditing ? (
                 <div className="mt-2 flex items-center gap-2">
-                  {(f as any).type === "select" ? (
+                  {f.type === "select" ? (
                     <select
                       value={profile[key]}
                       onChange={(e) => change(key, e.target.value)}
                       className="rounded border px-2 py-1"
                       autoFocus
                     >
-                      {(f as any).options.map((opt: any) => (
+                      {f.options.map((opt) => (
                         <option key={opt.value} value={opt.value}>
                           {opt.label}
                         </option>

@@ -73,8 +73,7 @@ function RutinaDetalle() {
         <div className="text-center space-y-2 max-w-sm">
           <p className="text-red-600 font-medium">Error al cargar ejercicios</p>
           <p className="text-sm text-slate-500">
-            {/* error puede ser unknown, mantené esto simple */}
-            {(error as any)?.message ?? "Ha ocurrido un error"}
+            {error instanceof Error ? error.message : "Ha ocurrido un error"}
           </p>
         </div>
       </div>
