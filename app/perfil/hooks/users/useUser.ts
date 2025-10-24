@@ -7,7 +7,7 @@ export const useUsers = () =>
   useQuery<UserI[], Error>({
     queryKey: ["user"],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/user/profile`, {
+      const res = await fetch(`${API_URL}/user/`, {
         credentials: "include",
       });
       if (!res.ok) {

@@ -21,7 +21,7 @@ export const useUpdateUser = () => {
 
   return useMutation<UserI, Error, UpdateUser>({
     mutationFn: async (payload) => {
-      const res = await fetch(`${API_URL}/user/profile`, {
+      const res = await fetch(`${API_URL}/user/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -42,7 +42,7 @@ export const useUpdateUser = () => {
         if (!oldData) return [updatedUser];
         if (Array.isArray(oldData)) {
           return oldData.map((u: UserI) =>
-            u.id === updatedUser.id ? updatedUser : u
+            u.id === updatedUser.id ? updatedUser : u,
           );
         }
         return updatedUser;

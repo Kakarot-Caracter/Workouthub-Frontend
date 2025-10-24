@@ -20,7 +20,7 @@ const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    setError,
+
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormData>({
     defaultValues: {
@@ -37,13 +37,12 @@ const RegisterForm = () => {
       const success = await registerUser(
         data.username,
         data.email,
-        data.password
+        data.password,
       );
 
       if (!success) {
         const msg = "Credenciales inválidas o el usuario ya existe.";
-        // Mapea a email por defecto
-        setError("email", { type: "server", message: msg });
+
         setServerError(msg);
         return;
       }
@@ -54,18 +53,7 @@ const RegisterForm = () => {
         (err instanceof Error && err.message) ||
         (typeof err === "string" && err) ||
         "Error del servidor. Intenta más tarde.";
-      // intenta mapear a campo si el mensaje lo sugiere
-      if (
-        msg.toLowerCase().includes("email") ||
-        msg.toLowerCase().includes("usuario")
-      ) {
-        setError("email", { type: "server", message: msg });
-      } else if (
-        msg.toLowerCase().includes("password") ||
-        msg.toLowerCase().includes("contraseña")
-      ) {
-        setError("password", { type: "server", message: msg });
-      }
+
       setServerError(msg);
     }
   };
