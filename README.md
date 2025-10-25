@@ -123,6 +123,4 @@ El proyecto sigue la convención del `App Router` de Next.js, organizando el có
 
 ## 📄 Licencia
 
-Este proyecto es de código privado y no tiene una licencia de código abierto.
-
-UNLICENSED
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
