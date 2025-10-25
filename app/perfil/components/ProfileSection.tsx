@@ -86,33 +86,46 @@ export default function ProfileSection() {
     if (key === "height" || key === "age" || key === "weight") {
       payload[key] = profile[key] === "" ? null : Number(profile[key]);
     } else if (key === "gender") {
-      payload[key] = profile[key]
-        ? (String(profile[key]).toLowerCase() as UserI["gender"])
+      // ✅ CORREGIDO: Asegurar que siempre se envíe el valor correcto
+      const genderValue = profile[key].trim();
+      payload[key] = genderValue
+        ? (genderValue.toLowerCase() as UserI["gender"])
         : null;
     } else if (key === "weeklyActivity") {
-      payload[key] = profile[key]
-        ? (String(profile[key]).toUpperCase() as UserI["weeklyActivity"])
+      const activityValue = profile[key].trim();
+      payload[key] = activityValue
+        ? (activityValue.toUpperCase() as UserI["weeklyActivity"])
         : null;
     }
 
-    console.log("Payload a enviar:", payload);
+    console.log("Payload a enviar:", payload, "Valor original:", profile[key]);
 
     try {
       await updateUser.mutateAsync(payload);
     } catch (err) {
       console.error("Error guardando:", err);
+      // ✅ Opcional: Reabrir edición si hay error
+      setEditField(key);
     } finally {
       setSavingField(null);
     }
   };
 
   const display = (key: keyof ProfileData, value: string) => {
-    if (!value) return "-";
-    if (key === "gender") return value === "male" ? "Hombre" : "Mujer";
+    if (!value || value.trim() === "") return "-";
+    if (key === "gender") {
+      const genderValue = value.toLowerCase();
+      return genderValue === "male"
+        ? "Hombre"
+        : genderValue === "female"
+          ? "Mujer"
+          : value;
+    }
     if (key === "weeklyActivity") {
-      if (value === "LIGHT") return "Ligera (1-3)";
-      if (value === "MODERATE") return "Moderada (3-5)";
-      if (value === "INTENSE") return "Intensa (6-7)";
+      const activityValue = value.toUpperCase();
+      if (activityValue === "LIGHT") return "Ligera (1-3)";
+      if (activityValue === "MODERATE") return "Moderada (3-5)";
+      if (activityValue === "INTENSE") return "Intensa (6-7)";
     }
     return value;
   };
@@ -130,6 +143,7 @@ export default function ProfileSection() {
       key: "gender",
       type: "select",
       options: [
+        { value: "", label: "Seleccionar..." }, // ✅ Opción vacía explícita
         { value: "male", label: "Hombre" },
         { value: "female", label: "Mujer" },
       ],
@@ -139,6 +153,7 @@ export default function ProfileSection() {
       key: "weeklyActivity",
       type: "select",
       options: [
+        { value: "", label: "Seleccionar..." }, // ✅ Opción vacía explícita
         { value: "LIGHT", label: "1-3 veces/semana" },
         { value: "MODERATE", label: "3-5 veces/semana" },
         { value: "INTENSE", label: "6-7 veces/semana" },
@@ -188,7 +203,11 @@ export default function ProfileSection() {
                       autoFocus
                     />
                   )}
-                  <button onClick={() => save(key)} className="p-1">
+                  <button
+                    onClick={() => save(key)}
+                    className="p-1"
+                    disabled={savingField === key}
+                  >
                     <Check className="w-4 h-4 text-green-600" />
                   </button>
                 </div>
