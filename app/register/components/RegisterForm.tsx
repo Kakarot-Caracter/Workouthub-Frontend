@@ -24,9 +24,9 @@ const RegisterForm = () => {
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormData>({
     defaultValues: {
-      username: "Giovanni",
-      email: "itachimartinez0@gmail.com",
-      password: "MADARA12345",
+      username: "",
+      email: "",
+      password: "",
     },
   });
 
