@@ -23,8 +23,8 @@ const LoginForm = () => {
     formState: { errors, isSubmitting, isSubmitted },
   } = useForm<FormData>({
     defaultValues: {
-      email: "itachimartinez0@gmail.com",
-      password: "MADARA12345",
+      email: "",
+      password: "",
     },
   });
 
