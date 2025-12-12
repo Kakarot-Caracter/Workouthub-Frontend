@@ -1,6 +1,16 @@
 "use client";
 
-import { X, Trash2, AlertTriangle } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { AlertTriangle } from "lucide-react";
 
 type ConfirmDeleteModalProps = {
   open: boolean;
@@ -14,66 +24,44 @@ export default function ConfirmDeleteModalRoutine({
   open,
   onClose,
   onConfirm,
-
+  routineName,
   isDeleting = false,
 }: ConfirmDeleteModalProps) {
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-
-      <div className="relative z-10 w-full max-w-md bg-white rounded-xl shadow-xl p-6 mx-4">
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-gray-100 transition-colors"
-          disabled={isDeleting}
-        >
-          <X size={20} />
-        </button>
-
-        <div className="flex items-center gap-3 mb-4">
-          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-            <AlertTriangle size={20} className="text-red-600" />
+    <AlertDialog open={open} onOpenChange={onClose}>
+      <AlertDialogContent className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-3xl max-w-md">
+        <AlertDialogHeader>
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-red-600" />
+            </div>
+            <AlertDialogTitle className="text-xl font-bold text-gray-800">
+              Eliminar rutina
+            </AlertDialogTitle>
           </div>
-          <h3 className="text-lg font-semibold text-slate-900">
-            Eliminar rutina
-          </h3>
-        </div>
-
-        <div className="mb-6">
-          <p className="text-slate-600 mb-2">
-            ¿Estás seguro de que quieres eliminar la rutina?
-          </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
+          <AlertDialogDescription className="text-gray-600 text-base">
+            ¿Estás seguro de que quieres eliminar la rutina{" "}
+            <span className="font-semibold text-gray-800">"{routineName}"</span>
+            ? Esta acción no se puede deshacer.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter className="flex flex-col sm:flex-row gap-3 sm:justify-end">
+          <AlertDialogCancel
             onClick={onClose}
-            className="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-slate-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
             disabled={isDeleting}
+            className="w-full sm:w-auto border-gray-300 hover:bg-gray-50 text-gray-700"
           >
             Cancelar
-          </button>
-          <button
-            type="button"
+          </AlertDialogCancel>
+          <AlertDialogAction
             onClick={onConfirm}
-            className="flex-1 py-2 px-4 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             disabled={isDeleting}
+            className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
           >
-            {isDeleting ? (
-              "Eliminando..."
-            ) : (
-              <>
-                <Trash2 size={16} />
-                Eliminar
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
+            {isDeleting ? "Eliminando..." : "Eliminar rutina"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

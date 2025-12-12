@@ -1,47 +1,36 @@
-import React from "react";
-import { Target, TrendingUp, Users } from "lucide-react";
+import { Sparkles } from "lucide-react";
+
+import FeaturesCards from "./FeaturesCards";
 
 const KeyFeatures = () => {
-  const features = [
-    {
-      icon: <Target className="w-10 h-10 text-teal-800" />,
-      title: "Rutinas Personalizadas",
-      description:
-        "Crea y personaliza rutinas adaptadas a tus objetivos específicos de fitness.",
-    },
-    {
-      icon: <TrendingUp className="w-10 h-10 text-teal-800" />,
-      title: "Seguimiento de Progreso",
-      description:
-        "Monitorea tu evolución con estadísticas detalladas y métricas de rendimiento.",
-    },
-    {
-      icon: <Users className="w-10 h-10 text-teal-800" />,
-      title: "Comunidad Activa",
-      description:
-        "Conecta con otros entusiastas del fitness y comparte tu progreso.",
-    },
-  ];
-
   return (
-    <section className="w-full py-16 px-4 bg-gradient-to-br  flex justify-center">
-      <div className=" w-full text-center">
-        <h2 className="text-3xl font-bold text-gray-600 mb-6 text-balance">
-          Características Principales
-        </h2>
+    <section className="w-full py-20 md:py-28 px-4 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto relative">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 border border-teal-100 mb-6">
+            <Sparkles className="w-4 h-4 text-teal-600" />
+            <span className="text-sm font-medium text-teal-700">
+              Características Exclusivas
+            </span>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10  mx-auto px-4">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-cyan-50 p-8  rounded-lg shadow-sm text-center"
-            >
-              <div className="flex justify-center mb-4">{feature.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
-            </div>
-          ))}
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            <span className="bg-gradient-to-r from-teal-600 via-blue-600 to-violet-600 bg-clip-text text-transparent">
+              Todo lo que necesitas
+            </span>
+            <br />
+            <span className="text-gray-800">
+              para tu transformación fitness
+            </span>
+          </h2>
+
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Herramientas diseñadas para potenciar tu rendimiento y mantenerte
+            motivado en cada paso del camino.
+          </p>
         </div>
+
+        <FeaturesCards />
       </div>
     </section>
   );

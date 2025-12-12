@@ -3,12 +3,36 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Edit, Trash2, Plus, AlertCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  Dumbbell,
+  Sparkles,
+  Pen,
+  PenIcon,
+  TrashIcon,
+} from "lucide-react";
 import { ExerciseI } from "@/app/shared/types";
 import { ExerciseFormModal } from "../components/ExerciseFormModal";
 import ConfirmDeleteExerciseModal from "../components/ConfirmDeleteExerciseModal";
 import { useExercises } from "../hooks/exercises/useExercise";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function RutinaDetallePage() {
   const [queryClient] = useState(() => new QueryClient());
@@ -59,155 +83,208 @@ function RutinaDetalle() {
   // Loading
   if (isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-        <p className="text-slate-500 text-lg text-center">
-          Cargando ejercicios...
-        </p>
-      </div>
+      <section className="w-full py-12 sm:py-16 px-4 relative">
+        <div className="max-w-6xl mx-auto text-center py-20">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+          <p className="mt-4 text-gray-600">Cargando ejercicios...</p>
+        </div>
+      </section>
     );
 
   // Error
   if (error)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
-        <div className="text-center space-y-2 max-w-sm">
-          <p className="text-red-600 font-medium">Error al cargar ejercicios</p>
-          <p className="text-sm text-slate-500">
-            {error instanceof Error ? error.message : "Ha ocurrido un error"}
-          </p>
+      <section className="w-full py-12 sm:py-16 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="pt-6">
+              <div className="text-center">
+                <h3 className="font-semibold text-red-700 mb-2">
+                  Error al cargar ejercicios
+                </h3>
+                <p className="text-red-600">
+                  {error instanceof Error
+                    ? error.message
+                    : "Ha ocurrido un error"}
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4"
+                  onClick={() => window.location.reload()}
+                >
+                  Reintentar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </div>
+      </section>
     );
 
   return (
-    <div className="min-h-screen bg-slate-50 py-4 sm:py-6 px-3 sm:px-4 lg:px-6">
-      <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
-        {/* Back */}
-        <Link
-          href="/rutinas"
-          className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors text-sm"
-        >
-          <ArrowLeft size={16} />
-          <span className="hidden xs:inline">Volver a rutinas</span>
-          <span className="xs:hidden">Volver</span>
-        </Link>
+    <section className="w-full py-8 sm:py-12 px-4 sm:px-6 relative min-h-screen">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
+      <div className="absolute top-1/4 left-10 w-80 h-80 bg-blue-200/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-teal-200/10 rounded-full blur-3xl" />
 
+      <div className="max-w-6xl mx-auto relative">
         {/* Header */}
-        <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border p-4 sm:p-6">
-          <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            className="gap-2 mb-6 text-gray-600 hover:text-blue-600"
+            asChild
+          >
+            <Link href="/rutinas">
+              <ArrowLeft className="w-4 h-4" />
+              Volver a rutinas
+            </Link>
+          </Button>
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-lg sm:text-xl font-semibold text-slate-900">
-                Ejercicios de la rutina
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+                Ejercicios de la Rutina
               </h1>
-              <p className="text-slate-500 text-sm mt-1">
-                {exercises.length} ejercicio{exercises.length !== 1 ? "s" : ""}
+              <p className="text-gray-600 mt-2">
+                Gestiona los ejercicios de tu rutina de entrenamiento
               </p>
             </div>
-            <button
-              onClick={handleCreateExercise}
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 sm:py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-lg sm:rounded-xl shadow-sm transition text-sm sm:text-base w-full sm:w-auto"
-            >
-              <Plus size={16} />
-              <span className="sm:hidden">Agregar ejercicio</span>
-              <span className="hidden sm:inline">Agregar</span>
-            </button>
+
+            <div className="flex items-center gap-4">
+              <div className="px-3 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-sm text-blue-700">
+                {exercises.length} ejercicio{exercises.length !== 1 ? "s" : ""}
+              </div>
+              <Button
+                onClick={handleCreateExercise}
+                className="gap-2 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+              >
+                <Plus className="w-4 h-4" />
+                Agregar Ejercicio
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Lista - TABLA responsive */}
+        {/* Content */}
         {exercises.length === 0 ? (
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border p-6 sm:p-8 text-center">
-            <AlertCircle
-              size={40}
-              className="sm:hidden mx-auto text-slate-400 mb-3"
-            />
-            <AlertCircle
-              size={48}
-              className="hidden sm:block mx-auto text-slate-400 mb-3"
-            />
-            <h2 className="text-base sm:text-lg font-medium text-slate-800">
-              No hay ejercicios aún
-            </h2>
-            <p className="text-slate-500 text-sm mb-4">
-              Agrega tu primer ejercicio para comenzar.
-            </p>
-          </div>
+          <Card className="border-dashed border-2 border-gray-300 bg-transparent">
+            <CardContent className="py-16 text-center">
+              <div className="text-gray-400 mb-4">
+                <Dumbbell className="w-16 h-16 mx-auto" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-700 mb-3">
+                No hay ejercicios aún
+              </h3>
+              <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                Agrega tu primer ejercicio para comenzar a entrenar con esta
+                rutina.
+              </p>
+              <Button
+                onClick={handleCreateExercise}
+                className="gap-2 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+              >
+                <Plus className="w-4 h-4" />
+                Crear primer ejercicio
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
-          <div className="bg-white rounded-xl sm:rounded-2xl shadow-sm border overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-xs sm:text-sm min-w-[500px]">
-                <thead className="bg-slate-100 text-slate-600">
-                  <tr>
-                    <th className="text-left py-2 sm:py-3 px-2 sm:px-4 font-medium">
-                      Ejercicio
-                    </th>
-                    <th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium">
-                      Series
-                    </th>
-                    <th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium">
-                      Reps
-                    </th>
-                    <th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium">
-                      Peso (kg)
-                    </th>
-                    <th className="text-center py-2 sm:py-3 px-2 sm:px-4 font-medium">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {exercises.map((exercise) => (
-                    <tr
-                      key={exercise.id}
-                      className="border-t last:border-b hover:bg-slate-50 transition"
-                    >
-                      <td className="py-3 sm:py-4 px-2 sm:px-4">
-                        <div className="font-semibold text-slate-800 text-xs sm:text-sm">
-                          {exercise.name}
-                        </div>
-                      </td>
-
-                      <td className="py-3 sm:py-4 px-2 sm:px-4 text-center text-slate-600">
-                        {exercise.sets ?? "-"}
-                      </td>
-
-                      <td className="py-3 sm:py-4 px-2 sm:px-4 text-center text-slate-600">
-                        {exercise.reps ?? "-"}
-                      </td>
-
-                      <td className="py-3 sm:py-4 px-2 sm:px-4 text-center text-slate-600">
-                        {exercise.weight ?? "-"}
-                      </td>
-
-                      <td className="py-3 sm:py-4 px-2 sm:px-4 text-center">
-                        <div className="flex justify-center gap-1 sm:gap-2">
-                          <button
-                            onClick={() => handleEditExercise(exercise)}
-                            className="p-1.5 sm:p-2 rounded-lg hover:bg-sky-50 text-slate-500 hover:text-sky-700 transition"
-                            title="Editar ejercicio"
-                            aria-label={`Editar ${exercise.name}`}
-                          >
-                            <Edit size={14} className="sm:hidden" />
-                            <Edit size={16} className="hidden sm:block" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClick(exercise)}
-                            className="p-1.5 sm:p-2 rounded-lg hover:bg-red-50 text-slate-500 hover:text-red-600 transition"
-                            title="Eliminar ejercicio"
-                            aria-label={`Eliminar ${exercise.name}`}
-                          >
-                            <Trash2 size={14} className="sm:hidden" />
-                            <Trash2 size={16} className="hidden sm:block" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl">
+                  <Dumbbell className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl font-bold text-gray-800">
+                    Lista de Ejercicios
+                  </CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Haz clic en un ejercicio para editarlo o eliminarlo
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-xl border border-gray-200 overflow-hidden">
+                <Table>
+                  <TableHeader className="bg-gradient-to-r from-gray-50 to-blue-50/50">
+                    <TableRow>
+                      <TableHead className="font-semibold text-gray-700">
+                        Ejercicio
+                      </TableHead>
+                      <TableHead className="text-center font-semibold text-gray-700">
+                        Series
+                      </TableHead>
+                      <TableHead className="text-center font-semibold text-gray-700">
+                        Repeticiones
+                      </TableHead>
+                      <TableHead className="text-center font-semibold text-gray-700">
+                        Peso (kg)
+                      </TableHead>
+                      <TableHead className="text-center font-semibold text-gray-700">
+                        Acciones
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {exercises.map((exercise) => (
+                      <TableRow
+                        key={exercise.id}
+                        className="hover:bg-gray-50/50 transition-colors"
+                      >
+                        <TableCell className="font-medium text-gray-800">
+                          <div className="flex items-center gap-3">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            {exercise.name}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center text-gray-600">
+                          <span className="px-3 py-1 bg-blue-50 rounded-full text-sm font-medium">
+                            {exercise.sets ?? "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-center text-gray-600">
+                          <span className="px-3 py-1 bg-teal-50 rounded-full text-sm font-medium">
+                            {exercise.reps ?? "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-center text-gray-600">
+                          <span className="px-3 py-1 bg-violet-50 rounded-full text-sm font-medium">
+                            {exercise.weight ?? "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex justify-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-gray-500 hover:text-blue-600 hover:bg-blue-50"
+                              onClick={() => handleEditExercise(exercise)}
+                            >
+                              <span className="sr-only">Editar</span>
+                              <PenIcon />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-gray-500 hover:text-red-600 hover:bg-red-50"
+                              onClick={() => handleDeleteClick(exercise)}
+                            >
+                              <span className="sr-only">Eliminar</span>
+                              <TrashIcon />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
         )}
       </div>
 
@@ -227,6 +304,6 @@ function RutinaDetalle() {
           exerciseId={exerciseToDelete.id}
         />
       )}
-    </div>
+    </section>
   );
 }

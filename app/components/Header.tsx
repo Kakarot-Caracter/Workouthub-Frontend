@@ -1,6 +1,17 @@
-import { Dumbbell } from "lucide-react";
-import Link from "next/link";
+import { Dumbbell, LogOut, Menu, User } from "lucide-react";
+
 import { cookies } from "next/headers";
+import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default async function Header() {
   const cookieStore = await cookies();
@@ -10,51 +21,138 @@ export default async function Header() {
   return <HeaderClient isAuthenticated={isAuthenticated} />;
 }
 
-// Componente separado para el cliente
 function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
   return (
-    <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Dumbbell className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold text-foreground">WorkoutHub</h1>
-        </div>
-
-        {/* Navegación */}
-        <nav className="hidden md:flex items-center gap-6">
-          {isAuthenticated ? (
-            <>
-              <Link
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                href="/perfil"
-              >
-                Mi Perfil
-              </Link>
-              <Link
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                href="/rutinas"
-              >
-                Rutinas
-              </Link>
-
-              <p>Welcome</p>
-            </>
-          ) : (
-            <div className="flex items-center gap-2">
-              <Link href="/login">
-                <button className="h-8 px-3 rounded-md text-sm font-medium transition hover:bg-accent hover:text-accent-foreground">
-                  Iniciar Sesión
-                </button>
-              </Link>
-              <Link href="/register">
-                <button className="h-8 px-3 rounded-md text-sm font-medium bg-blue-950 text-primary-foreground shadow-xs hover:bg-primary/90">
-                  Registrar
-                </button>
-              </Link>
+    <header className="w-full sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-md">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="p-2.5 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl group-hover:scale-105 transition-transform">
+              <Dumbbell className="w-5 h-5 text-white" />
             </div>
-          )}
-        </nav>
+            <div>
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
+                WorkoutHub
+              </span>
+              <p className="text-xs text-gray-500 -mt-0.5">
+                Tu fitness, simplificado
+              </p>
+            </div>
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-8">
+            <Link
+              href="/"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Inicio
+            </Link>
+            <Link
+              href="/rutinas"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Rutinas
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-4">
+            {isAuthenticated ? (
+              <div className="hidden md:flex items-center gap-4">
+                <Link
+                  href="/perfil"
+                  className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  Mi Perfil
+                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="rounded-full h-9 w-9 p-0 border-gray-300 hover:border-blue-400"
+                    >
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/perfil">Mi Perfil</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/rutinas">Mis Rutinas</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-red-600">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-gray-700 border-gray-300 hover:border-blue-400 hover:text-blue-600"
+                  asChild
+                >
+                  <Link href="/login">Iniciar Sesión</Link>
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-teal-500 text-white hover:from-blue-700 hover:to-teal-600"
+                  asChild
+                >
+                  <Link href="/register">Registrarse</Link>
+                </Button>
+              </div>
+            )}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Navegación</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/">Inicio</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/rutinas">Rutinas</Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+                {isAuthenticated ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/perfil">Mi Perfil</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="text-red-600">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/login">Iniciar Sesión</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/register">Registrarse</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
       </div>
     </header>
   );

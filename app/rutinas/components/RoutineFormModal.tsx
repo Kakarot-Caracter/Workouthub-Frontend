@@ -1,18 +1,29 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, AlertCircle } from "lucide-react";
+import { X } from "lucide-react";
 import type { RoutineI } from "@/app/shared/types";
-
 import {
   CreateRoutine,
   useCreateRoutine,
 } from "../hooks/routines/useCreateRoutine";
-
 import {
   useUpdateRoutine,
   UpdateRoutine,
 } from "../hooks/routines/useUpdateRoutine";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 type RoutineFormModalProps = {
   open: boolean;
@@ -34,7 +45,11 @@ export default function RoutineFormModal({
 
   const isEditing = !!routine;
   const title = isEditing ? "Editar rutina" : "Crear nueva rutina";
-  const submitText = isEditing ? "Guardar cambios" : "Crear rutina";
+  const submitText = isSubmitting
+    ? "Guardando..."
+    : isEditing
+      ? "Guardar cambios"
+      : "Crear rutina";
 
   useEffect(() => {
     if (open && routine) {
@@ -89,89 +104,92 @@ export default function RoutineFormModal({
     }
   };
 
-  if (!open) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50" onClick={handleClose} />
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="sm:max-w-md bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-3xl">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold text-gray-800">
+            {title}
+          </DialogTitle>
+          <DialogDescription className="text-gray-600">
+            {isEditing
+              ? "Modifica los datos de tu rutina"
+              : "Completa los datos para crear una nueva rutina"}
+          </DialogDescription>
+        </DialogHeader>
 
-      <div className="relative z-10 w-full max-w-md bg-white rounded-xl shadow-xl p-6 mx-4">
-        <button
-          type="button"
-          onClick={handleClose}
-          className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-gray-100 transition-colors"
-          disabled={isSubmitting}
-        >
-          <X size={20} />
-        </button>
+        <form onSubmit={handleSubmit} className="space-y-6 py-4">
+          {error && (
+            <Alert
+              variant="destructive"
+              className="bg-red-50 border-red-200 text-red-700"
+            >
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-        <h3 className="text-lg font-semibold mb-6 pr-8">{title}</h3>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-gray-700 font-medium">
+                Nombre de la rutina *
+              </Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, name: e.target.value }))
+                }
+                placeholder="Ej: Push Pull Legs"
+                className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                disabled={isSubmitting}
+                required
+              />
+            </div>
 
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 flex items-center gap-2">
-            <AlertCircle size={16} className="text-red-600 flex-shrink-0" />
-            <span className="text-sm text-red-700">{error}</span>
+            <div className="space-y-2">
+              <Label
+                htmlFor="description"
+                className="text-gray-700 font-medium"
+              >
+                Descripción (opcional)
+              </Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Ej: Rutina de 3 días por semana"
+                rows={3}
+                className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                disabled={isSubmitting}
+              />
+            </div>
           </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Nombre de la rutina *
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, name: e.target.value }))
-              }
-              placeholder="Ej: Push Pull Legs"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-              disabled={isSubmitting}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">
-              Descripción (opcional)
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              placeholder="Ej: Rutina de 3 días por semana"
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent resize-none"
-              disabled={isSubmitting}
-            />
-          </div>
-
-          <div className="flex items-center gap-3 pt-4">
-            <button
+          <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-4">
+            <Button
               type="button"
+              variant="outline"
               onClick={handleClose}
-              className="flex-1 py-2 px-4 border border-gray-300 rounded-lg text-slate-700 hover:bg-gray-50 disabled:opacity-50"
+              className="w-full sm:w-auto border-gray-300 hover:bg-gray-50 text-gray-700"
               disabled={isSubmitting}
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              className="flex-1 py-2 px-4 bg-sky-800 text-white rounded-lg hover:bg-sky-900 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Guardando..." : submitText}
-            </button>
-          </div>
+              {submitText}
+            </Button>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,49 +1,36 @@
-import React from "react";
-import { MessageSquare, ThumbsUp, Star } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import TestimonialsCards from "./TestimonialsCards";
 
 const UserTestimonials = () => {
-  const testimonials = [
-    {
-      icon: <MessageSquare className="w-10 h-10 text-teal-800" />,
-      title: "Experiencia Motivadora",
-      description:
-        "¡Esta aplicación me mantiene motivado y constante con mis objetivos de fitness cada día!",
-    },
-    {
-      icon: <ThumbsUp className="w-10 h-10 text-teal-800" />,
-      title: "Fácil de Usar",
-      description:
-        "Las rutinas son muy fáciles de seguir y puedo adaptarlas a mi horario.",
-    },
-    {
-      icon: <Star className="w-10 h-10 text-teal-800" />,
-      title: "Comunidad Increíble",
-      description:
-        "Me encanta conectar con otras personas que comparten el mismo camino fitness.",
-    },
-  ];
-
   return (
-    <section className="w-full py-16 px-4 bg-gradient-to-br from-blue-100 to-gray-100 flex justify-center">
-      <div className="w-full text-center">
-        <h2 className="text-3xl font-bold text-gray-600 mb-6 text-balance">
-          Lo Que Dicen Nuestros Usuarios
-        </h2>
+    <section className="w-full py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mx-auto px-4">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="bg-white p-8 rounded-lg shadow-sm text-center"
-            >
-              <div className="flex justify-center mb-4">{testimonial.icon}</div>
-              <h3 className="text-lg font-semibold mb-2">
-                {testimonial.title}
-              </h3>
-              <p className="text-gray-600">{testimonial.description}</p>
-            </div>
-          ))}
+      <div className="max-w-6xl mx-auto relative">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-blue-50 border border-blue-100 mb-4 sm:mb-6">
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+            <span className="text-xs sm:text-sm font-medium text-blue-700">
+              Testimonios Reales
+            </span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4 sm:mb-6">
+            <span className="bg-gradient-to-r from-blue-600 via-teal-600 to-violet-600 bg-clip-text text-transparent block">
+              Lo Que Dicen
+            </span>
+            <span className="text-gray-800 block mt-1 sm:mt-2">
+              Nuestros Usuarios
+            </span>
+          </h2>
+
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+            Descubre cómo nuestra comunidad está transformando su fitness día a
+            día.
+          </p>
         </div>
+
+        <TestimonialsCards />
       </div>
     </section>
   );
