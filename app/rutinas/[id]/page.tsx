@@ -1,22 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  Plus,
-  Dumbbell,
-  Sparkles,
-  Pen,
-  PenIcon,
-  TrashIcon,
-} from "lucide-react";
-import { ExerciseI } from "@/app/shared/types";
-import { ExerciseFormModal } from "../components/ExerciseFormModal";
-import ConfirmDeleteExerciseModal from "../components/ConfirmDeleteExerciseModal";
-import { useExercises } from "../hooks/exercises/useExercise";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ArrowLeft, Dumbbell, PenIcon, Plus, TrashIcon } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import type { ExerciseI } from "@/app/shared/types";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -33,6 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ConfirmDeleteExerciseModal from "../components/ConfirmDeleteExerciseModal";
+import { ExerciseFormModal } from "../components/ExerciseFormModal";
+import { useExercises } from "../hooks/exercises/useExercise";
 
 export default function RutinaDetallePage() {
   const [queryClient] = useState(() => new QueryClient());
@@ -58,7 +50,6 @@ function RutinaDetalle() {
 
   const { data: exercises = [], isLoading, error } = useExercises(routineId);
 
-  // Handlers
   const handleCreateExercise = () => {
     setEditingExercise(undefined);
     setExerciseModalOpen(true);
@@ -80,7 +71,6 @@ function RutinaDetalle() {
     setEditingExercise(undefined);
   };
 
-  // Loading
   if (isLoading)
     return (
       <section className="w-full py-12 sm:py-16 px-4 relative">
@@ -91,7 +81,6 @@ function RutinaDetalle() {
       </section>
     );
 
-  // Error
   if (error)
     return (
       <section className="w-full py-12 sm:py-16 px-4 relative">
@@ -123,13 +112,11 @@ function RutinaDetalle() {
 
   return (
     <section className="w-full py-8 sm:py-12 px-4 sm:px-6 relative min-h-screen">
-      {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-blue-200/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-teal-200/10 rounded-full blur-3xl" />
 
       <div className="max-w-6xl mx-auto relative">
-        {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
@@ -167,7 +154,6 @@ function RutinaDetalle() {
           </div>
         </div>
 
-        {/* Content */}
         {exercises.length === 0 ? (
           <Card className="border-dashed border-2 border-gray-300 bg-transparent">
             <CardContent className="py-16 text-center">
@@ -288,7 +274,6 @@ function RutinaDetalle() {
         )}
       </div>
 
-      {/* Modales */}
       <ExerciseFormModal
         open={exerciseModalOpen}
         onClose={handleCloseExerciseModal}
@@ -298,7 +283,7 @@ function RutinaDetalle() {
       {exerciseToDelete && (
         <ConfirmDeleteExerciseModal
           open={deleteModalOpen}
-          onClose={handleCloseDeleteModal}
+          onCloseAction={handleCloseDeleteModal}
           itemName={exerciseToDelete.name}
           routineId={routineId}
           exerciseId={exerciseToDelete.id}

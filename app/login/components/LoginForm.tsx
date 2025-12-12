@@ -1,14 +1,21 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight, Key, Mail, Sparkles } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowRight, Dumbbell, Sparkles, Key, Mail } from "lucide-react";
-import Link from "next/link";
 import { useAuthStore } from "@/app/stores/auth.store";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -18,15 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
-// Esquema de validación con Zod
 const loginSchema = z.object({
   email: z
     .string()
@@ -72,7 +71,6 @@ const LoginForm = () => {
         msg = err.message;
       }
 
-      // chequeo de errores de autenticación
       if (
         msg.toLowerCase().includes("401") ||
         msg.toLowerCase().includes("unauthorized") ||
@@ -89,14 +87,12 @@ const LoginForm = () => {
 
   return (
     <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 relative overflow-hidden">
-      {/* Background Elements - Coherente con otros componentes */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-blue-200/20 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl" />
 
       <div className="max-w-6xl mx-auto relative">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
-          {/* Left Side - Branding */}
           <div className="lg:w-1/2 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
               <Sparkles className="w-4 h-4 text-blue-600" />
@@ -118,7 +114,6 @@ const LoginForm = () => {
               progreso y conectar con la comunidad.
             </p>
 
-            {/* Features List */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {[
                 "Rutinas personalizadas",
@@ -126,7 +121,7 @@ const LoginForm = () => {
                 "Comunidad activa",
                 "Soporte 24/7",
               ].map((feature, index) => (
-                <div key={index} className="flex items-center gap-2">
+                <div key={index++} className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-teal-500 rounded-full" />
                   <span className="text-gray-700">{feature}</span>
                 </div>
@@ -134,7 +129,6 @@ const LoginForm = () => {
             </div>
           </div>
 
-          {/* Right Side - Form */}
           <div className="lg:w-1/2 max-w-md w-full">
             <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
               <CardHeader className="text-center space-y-1">

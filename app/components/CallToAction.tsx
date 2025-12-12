@@ -1,4 +1,4 @@
-import { ArrowRight, Sparkles, Target, Users, TrendingUp } from "lucide-react";
+import { ArrowRight, Sparkles, Target, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

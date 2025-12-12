@@ -1,8 +1,7 @@
-// ConfirmDeleteExerciseModal.tsx
 "use client";
 
-import React from "react";
-import { useDeleteExercise } from "../hooks/exercises/useDeleteExercise";
+import { AlertTriangle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,44 +12,42 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertTriangle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useDeleteExercise } from "../hooks/exercises/useDeleteExercise";
 
 type ConfirmDeleteExerciseModalProps = {
   open: boolean;
-  onClose: () => void;
+  onCloseAction: () => void;
   routineId: number;
   exerciseId: number;
   itemName?: string;
-  onDeleted?: () => void;
+  onDeletedAction?: () => void;
 };
 
 export default function ConfirmDeleteExerciseModal({
   open,
-  onClose,
+  onCloseAction,
   routineId,
   exerciseId,
   itemName = "",
-  onDeleted,
+  onDeletedAction,
 }: ConfirmDeleteExerciseModalProps) {
   const deleteMutation = useDeleteExercise();
 
-  const isLoading =
-    deleteMutation.isPending || deleteMutation.status === "pending";
+  const isLoading = deleteMutation.isPending;
 
   const handleConfirm = async () => {
     if (!exerciseId) return;
     try {
       await deleteMutation.mutateAsync({ routineId, exerciseId });
-      onDeleted?.();
-      onClose();
+      onDeletedAction?.();
+      onCloseAction();
     } catch (err) {
       console.error("Error al eliminar ejercicio:", err);
     }
   };
 
   const handleClose = () => {
-    if (!isLoading) onClose();
+    if (!isLoading) onCloseAction();
   };
 
   return (
@@ -80,8 +77,10 @@ export default function ConfirmDeleteExerciseModal({
 
           <AlertDialogDescription className="text-gray-600 text-base">
             ¿Estás seguro de que quieres eliminar el ejercicio{" "}
-            <span className="font-semibold text-gray-800">"{itemName}"</span>?
-            Esta acción no se puede deshacer.
+            <span className="font-semibold text-gray-800">
+              &quot;{itemName}&quot;
+            </span>
+            ? Esta acción no se puede deshacer.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

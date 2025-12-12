@@ -207,14 +207,14 @@ function RutinasContent() {
       {/* Modals */}
       <RoutineFormModal
         open={open}
-        onClose={handleCloseModal}
+        onCloseAction={handleCloseModal}
         routine={editingRoutine}
       />
 
       <ConfirmDeleteModalRoutine
         open={deleteModalOpen}
-        onClose={handleCloseDeleteModal}
-        onConfirm={handleConfirmDelete}
+        onCloseAction={handleCloseDeleteModal}
+        onConfirmAction={handleConfirmDelete}
         routineName={routineToDelete?.name || ""}
         isDeleting={deleteRoutine.isPending}
       />

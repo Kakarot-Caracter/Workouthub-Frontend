@@ -50,7 +50,8 @@ export default function CaloriesCalculator({ profileData }: Props) {
 
   const calculateKatchMcArdle = () => {
     if (height === 0 || age === 0 || weight === 0) return 0;
-    let bodyFatPercentage;
+    let bodyFatPercentage: number;
+
     if (gender === "male") {
       bodyFatPercentage = Math.min(Math.max(age / 2 + 5, 8), 25);
     } else {
@@ -83,10 +84,8 @@ export default function CaloriesCalculator({ profileData }: Props) {
   const bulkCalories = maintenanceCalories + 350;
   const cutCalories = maintenanceCalories - 400;
 
-  // SOLUCIÓN PARA DESKTOP - Layout mejorado
   return (
     <div className="w-full bg-gradient-to-br from-blue-50 to-teal-50/30 rounded-2xl border border-blue-100 p-4 md:p-6 lg:p-8 shadow-sm">
-      {/* Header - Mejorado para desktop */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="flex-shrink-0 p-2 md:p-3 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl shadow-md">
           <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -103,7 +102,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
 
       {mainBMR > 0 ? (
         <div className="space-y-6 md:space-y-8">
-          {/* Main Recommendation - Layout corregido para desktop */}
           <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-5 lg:p-6 border border-gray-200 shadow-sm">
             <div className="mb-4 md:mb-6">
               <h3 className="font-semibold text-gray-800 flex items-center gap-2">
@@ -117,7 +115,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
             </div>
 
             <div className="w-full grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              {/* Metabolismo Basal */}
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border border-blue-200">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 truncate">
                   Metabolismo Basal
@@ -128,7 +125,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-gray-500 mt-1">cal/día</div>
               </div>
 
-              {/* Mantenimiento */}
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg border border-emerald-200">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 truncate">
                   Mantenimiento
@@ -139,7 +135,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-gray-500 mt-1">cal/día</div>
               </div>
 
-              {/* Ganar Peso */}
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg border border-green-200">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 truncate">
                   Ganar Peso
@@ -150,7 +145,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-gray-500 mt-1">+350 cal</div>
               </div>
 
-              {/* Perder Peso */}
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg border border-orange-200">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 truncate">
                   Perder Peso
@@ -163,7 +157,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
             </div>
           </div>
 
-          {/* Formula Comparison - Layout corregido para desktop */}
           <div className="w-full bg-white/90 backdrop-blur-sm rounded-xl p-4 md:p-5 lg:p-6 border border-gray-200 shadow-sm">
             <div className="mb-4 md:mb-6">
               <h3 className="font-semibold text-gray-800 flex items-center gap-2">
@@ -179,7 +172,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
             </div>
 
             <div className="w-full grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              {/* Benedict-Harris (1919) */}
               <div className="w-full text-center p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 line-clamp-2 min-h-[2.5rem]">
                   Benedict-Harris (1919)
@@ -190,7 +182,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-gray-500 mt-1">cal</div>
               </div>
 
-              {/* Benedict-Harris (1984) */}
               <div className="w-full text-center p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 line-clamp-2 min-h-[2.5rem]">
                   Benedict-Harris (1984)
@@ -201,7 +192,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-gray-500 mt-1">cal</div>
               </div>
 
-              {/* Mifflin-St Jeor (1990) - Recomendado */}
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-blue-300 relative">
                 <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-[10px] xs:text-xs px-2 py-0.5 md:px-2.5 md:py-1 rounded-full whitespace-nowrap">
                   Recomendado
@@ -215,7 +205,6 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xs text-blue-600 mt-1">Más preciso</div>
               </div>
 
-              {/* Katch-McArdle */}
               <div className="w-full text-center p-3 md:p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                 <div className="text-xs md:text-sm text-gray-600 mb-1 line-clamp-2 min-h-[2.5rem]">
                   Katch-McArdle

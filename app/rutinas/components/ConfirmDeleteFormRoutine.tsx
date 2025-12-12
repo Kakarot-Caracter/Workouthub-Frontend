@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertTriangle } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,25 +11,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertTriangle } from "lucide-react";
 
 type ConfirmDeleteModalProps = {
   open: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+  onCloseAction: () => void;
+  onConfirmAction: () => void;
   routineName: string;
   isDeleting?: boolean;
 };
 
 export default function ConfirmDeleteModalRoutine({
   open,
-  onClose,
-  onConfirm,
+  onCloseAction,
+  onConfirmAction,
   routineName,
   isDeleting = false,
 }: ConfirmDeleteModalProps) {
   return (
-    <AlertDialog open={open} onOpenChange={onClose}>
+    <AlertDialog open={open} onOpenChange={onCloseAction}>
       <AlertDialogContent className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-3xl max-w-md">
         <AlertDialogHeader>
           <div className="flex items-center gap-3 mb-2">
@@ -41,20 +41,22 @@ export default function ConfirmDeleteModalRoutine({
           </div>
           <AlertDialogDescription className="text-gray-600 text-base">
             ¿Estás seguro de que quieres eliminar la rutina{" "}
-            <span className="font-semibold text-gray-800">"{routineName}"</span>
+            <span className="font-semibold text-gray-800">
+              &quot;{routineName}&quot;
+            </span>
             ? Esta acción no se puede deshacer.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex flex-col sm:flex-row gap-3 sm:justify-end">
           <AlertDialogCancel
-            onClick={onClose}
+            onClick={onCloseAction}
             disabled={isDeleting}
             className="w-full sm:w-auto border-gray-300 hover:bg-gray-50 text-gray-700"
           >
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={onConfirm}
+            onClick={onConfirmAction}
             disabled={isDeleting}
             className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
           >

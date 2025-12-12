@@ -1,16 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState } from "react";
 import type { RoutineI } from "@/app/shared/types";
-import {
-  CreateRoutine,
-  useCreateRoutine,
-} from "../hooks/routines/useCreateRoutine";
-import {
-  useUpdateRoutine,
-  UpdateRoutine,
-} from "../hooks/routines/useUpdateRoutine";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,21 +12,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  type CreateRoutine,
+  useCreateRoutine,
+} from "../hooks/routines/useCreateRoutine";
+import {
+  type UpdateRoutine,
+  useUpdateRoutine,
+} from "../hooks/routines/useUpdateRoutine";
 
 type RoutineFormModalProps = {
   open: boolean;
-  onClose: () => void;
+  onCloseAction: () => void;
   routine?: RoutineI;
 };
 
 export default function RoutineFormModal({
   open,
-  onClose,
+  onCloseAction,
   routine,
 }: RoutineFormModalProps) {
   const [formData, setFormData] = useState({ name: "", description: "" });
@@ -67,7 +66,7 @@ export default function RoutineFormModal({
     setFormData({ name: "", description: "" });
     setIsSubmitting(false);
     setError("");
-    onClose();
+    onCloseAction();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
