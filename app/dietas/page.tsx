@@ -4,15 +4,16 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ArrowLeft, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type { RoutineI } from "@/app/shared/types";
+import type { DietI } from "@/app/shared/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { queryClient } from "@/lib/queryClient";
-import ConfirmDeleteModalRoutine from "./components/ConfirmDeleteFormRoutine";
-import RoutineCard from "./components/RoutineCard";
-import RoutineFormModal from "./components/RoutineFormModal";
-import { useDeleteRoutine } from "./hooks/routines/useDeleteRoutine";
-import { useRoutines } from "./hooks/routines/useRoutine";
+import ConfirmDeleteModalDiet from "./components/ConfirmDeleteFormDiet";
+
+import { useDiets } from "./hooks/diets/useDiet";
+import { useDeleteDiet } from "./hooks/diets/useDeleteDiet";
+import DietFormModal from "./components/DietFormModal";
+import DietCard from "./components/DietCard";
 
 export default function RutinasPage() {
   return (
@@ -24,55 +25,55 @@ export default function RutinasPage() {
 
 function RutinasContent() {
   const [open, setOpen] = useState(false);
-  const [editingRoutine, setEditingRoutine] = useState<RoutineI | undefined>();
+  const [editingDiet, setEditingDiet] = useState<DietI | undefined>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [routineToDelete, setRoutineToDelete] = useState<
-    RoutineI | undefined
-  >();
+  const [dietToDelete, setDietToDelete] = useState<DietI | undefined>();
   const router = useRouter();
 
-  const { data, isLoading, error } = useRoutines();
-  const deleteRoutine = useDeleteRoutine();
+  const { data, isLoading, error } = useDiets();
 
-  const routines: RoutineI[] = data?.routines || [];
+  console.log("data", data);
+  const deleteDiet = useDeleteDiet();
 
-  console.log("routines", routines);
-  const handleEdit = (routine: RoutineI) => {
-    setEditingRoutine(routine);
+  const diets: DietI[] = data?.diets || [];
+
+  console.log("diets", diets);
+  const handleEdit = (diet: DietI) => {
+    setEditingDiet(diet);
     setOpen(true);
   };
 
-  const handleDeleteClick = (routine: RoutineI) => {
-    setRoutineToDelete(routine);
+  const handleDeleteClick = (diet: DietI) => {
+    setDietToDelete(diet);
     setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = async () => {
-    if (!routineToDelete) return;
+    if (!dietToDelete) return;
 
     try {
-      await deleteRoutine.mutateAsync(routineToDelete.id);
+      await deleteDiet.mutateAsync(dietToDelete.id);
       setDeleteModalOpen(false);
-      setRoutineToDelete(undefined);
+      setDietToDelete(undefined);
     } catch (error) {
-      console.error("Error al eliminar rutina:", error);
+      console.error("Error al eliminar dieta:", error);
     }
   };
 
   const handleCloseDeleteModal = () => {
-    if (!deleteRoutine.isPending) {
+    if (!deleteDiet.isPending) {
       setDeleteModalOpen(false);
-      setRoutineToDelete(undefined);
+      setDietToDelete(undefined);
     }
   };
 
   const handleCloseModal = () => {
     setOpen(false);
-    setEditingRoutine(undefined);
+    setEditingDiet(undefined);
   };
 
   const handleOpenCreateModal = () => {
-    setEditingRoutine(undefined);
+    setEditingDiet(undefined);
     setOpen(true);
   };
 
@@ -81,7 +82,7 @@ function RutinasContent() {
       <section className="w-full py-12 sm:py-16 px-4 relative">
         <div className="max-w-6xl mx-auto text-center py-20">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-gray-600">Cargando rutinas...</p>
+          <p className="mt-4 text-gray-600">Cargando dietas...</p>
         </div>
       </section>
     );
@@ -92,7 +93,7 @@ function RutinasContent() {
       <section className="w-full py-12 sm:py-16 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <div className="p-6 bg-red-50 border border-red-200 rounded-xl text-red-700">
-            <h3 className="font-semibold mb-2">Error al cargar las rutinas</h3>
+            <h3 className="font-semibold mb-2">Error al cargar las dietas</h3>
             <p>{error.message}</p>
             <Button
               variant="outline"
@@ -109,13 +110,11 @@ function RutinasContent() {
 
   return (
     <section className="w-full py-8 sm:py-12 px-4 sm:px-6 relative">
-      {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30" />
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-blue-200/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-teal-200/10 rounded-full blur-3xl" />
 
       <div className="max-w-6xl mx-auto relative">
-        {/* Header */}
         <div className="mb-8">
           <Button
             variant="ghost"
@@ -129,10 +128,11 @@ function RutinasContent() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
-                Mis Rutinas
+                Mis Dietas
               </h1>
               <p className="text-gray-600 mt-2">
-                Gestiona y organiza tus rutinas de entrenamiento
+                Gestiona y organiza tus dietas para alcanzar tus objetivos de
+                salud y bienestar.
               </p>
             </div>
 
@@ -141,20 +141,19 @@ function RutinasContent() {
               className="gap-2 bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
             >
               <Plus className="w-4 h-4" />
-              Nueva Rutina
+              Nueva Dieta
             </Button>
           </div>
         </div>
 
-        {/* Rutinas Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {routines.length > 0 ? (
-            routines.map((routine) => (
-              <RoutineCard
-                key={routine.id}
-                routine={routine}
-                onEdit={() => handleEdit(routine)}
-                onDelete={() => handleDeleteClick(routine)}
+          {diets.length > 0 ? (
+            diets.map((diet) => (
+              <DietCard
+                key={diet.id}
+                diet={diet}
+                onEditAction={() => handleEdit(diet)}
+                onDeleteAction={() => handleDeleteClick(diet)}
               />
             ))
           ) : (
@@ -165,10 +164,11 @@ function RutinasContent() {
                     <Plus className="w-12 h-12 mx-auto" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                    No tienes rutinas creadas
+                    No tienes dietas creadas
                   </h3>
                   <p className="text-gray-500 mb-6">
-                    Crea tu primera rutina para comenzar tu entrenamiento
+                    Crea tu primera dieta para comenzar a mejorar tu salud y
+                    bienestar.
                   </p>
                   <Button
                     onClick={handleOpenCreateModal}
@@ -176,15 +176,14 @@ function RutinasContent() {
                     className="gap-2"
                   >
                     <Plus className="w-4 h-4" />
-                    Crear primera rutina
+                    Crear primera dieta
                   </Button>
                 </CardContent>
               </Card>
             </div>
           )}
 
-          {/* Add New Card - Only show if there are routines */}
-          {routines.length > 0 && (
+          {diets.length > 0 && (
             <Card
               className="border-dashed border-2 border-gray-300 bg-transparent hover:bg-gray-50/50 cursor-pointer transition-colors"
               onClick={handleOpenCreateModal}
@@ -194,10 +193,10 @@ function RutinasContent() {
                   <Plus className="w-6 h-6 text-gray-600" />
                 </div>
                 <h3 className="font-semibold text-gray-700 mb-2">
-                  Agregar nueva rutina
+                  Agregar nueva dieta
                 </h3>
                 <p className="text-sm text-gray-500 text-center">
-                  Crea una nueva rutina personalizada
+                  Crea una nueva dieta personalizada
                 </p>
               </CardContent>
             </Card>
@@ -205,19 +204,18 @@ function RutinasContent() {
         </div>
       </div>
 
-      {/* Modals */}
-      <RoutineFormModal
+      <DietFormModal
         open={open}
         onCloseAction={handleCloseModal}
-        routine={editingRoutine}
+        diet={editingDiet}
       />
 
-      <ConfirmDeleteModalRoutine
+      <ConfirmDeleteModalDiet
         open={deleteModalOpen}
         onCloseAction={handleCloseDeleteModal}
         onConfirmAction={handleConfirmDelete}
-        routineName={routineToDelete?.name || ""}
-        isDeleting={deleteRoutine.isPending}
+        dietName={dietToDelete?.name || ""}
+        isDeleting={deleteDiet.isPending}
       />
     </section>
   );

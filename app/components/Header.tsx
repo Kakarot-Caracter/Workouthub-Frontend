@@ -53,6 +53,12 @@ function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
             >
               Rutinas
             </Link>
+            <Link
+              href="/dietas"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+            >
+              Dietas
+            </Link>
           </nav>
 
           <div className="flex items-center gap-4">

@@ -43,6 +43,27 @@ export interface RoutineI {
   updatedAt: string;
 }
 
+export interface DietI {
+  id: number;
+  name: string;
+  userId: number;
+  foods: FoodI[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface FoodI {
+  id: number;
+  name: string;
+  calories?: number | null;
+  protein?: number | null;
+  carbs?: number | null;
+  fat?: number | null;
+  dietId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ResponseI {
   message: string;
   routines: RoutineI[];

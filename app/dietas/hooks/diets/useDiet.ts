@@ -1,22 +1,21 @@
-// hooks/routines/useRoutine.ts
 import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "@/app/shared/constants/url-api";
-import type { RoutineI } from "@/app/shared/types";
+import type { DietI } from "@/app/shared/types";
 
 interface ResponseI {
   message: string;
-  routines: RoutineI[];
+  diets: DietI[];
 }
 
-export const useRoutines = () =>
+export const useDiets = () =>
   useQuery<ResponseI, Error>({
-    queryKey: ["routines"],
+    queryKey: ["diets"],
     queryFn: async () => {
-      const res = await fetch(`${API_URL}/routines`, {
+      const res = await fetch(`${API_URL}/diets`, {
         credentials: "include",
       });
       if (!res.ok) {
-        throw new Error(`Error ${res.status} al cargar rutinas`);
+        throw new Error(`Error ${res.status} al cargar dietas`);
       }
 
       return res.json();
