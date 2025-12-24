@@ -15,7 +15,7 @@ export const useUpdateFood = () => {
   return useMutation<FoodI, Error, UpdateFoodParams>({
     mutationFn: async ({ dietId, foodId, foodData }) => {
       const res = await fetch(`${API_URL}/diets/${dietId}/foods/${foodId}`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },

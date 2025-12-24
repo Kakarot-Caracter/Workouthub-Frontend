@@ -15,13 +15,12 @@ export type UpdateUser = Partial<
   >
 >;
 
-// PATCH a /user/profile (ajusta si tu endpoint es otro)
 export const useUpdateUser = () => {
   const qc = useQueryClient();
 
   return useMutation<UserI, Error, UpdateUser>({
     mutationFn: async (payload) => {
-      const res = await fetch(`${API_URL}/user/`, {
+      const res = await fetch(`${API_URL}/user`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -29,7 +28,6 @@ export const useUpdateUser = () => {
       });
 
       if (!res.ok) {
-        // intenta leer JSON con message, si falla usa status
         const errorData = await res.json().catch(() => null);
         throw new Error(errorData?.message || `Error ${res.status}`);
       }

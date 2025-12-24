@@ -81,13 +81,15 @@ function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuLabel>
+                      <Link href="/perfil">Mi Perfil</Link>
+                    </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/perfil">Mi Perfil</Link>
+                      <Link href="/rutinas">Mis Rutinas</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/rutinas">Mis Rutinas</Link>
+                      <Link href="/dietas">Mis Dietas</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-600">

@@ -54,6 +54,18 @@ function DietaDetalle() {
   const { data, isLoading, error } = useFoods(dietId);
   const foods = data?.foods || [];
 
+  // Totales: sumamos tratando valores nulos/undef como 0
+  const totals = foods.reduce(
+    (acc, food) => {
+      acc.calories += Number(food.calories ?? 0);
+      acc.protein += Number(food.protein ?? 0);
+      acc.carbs += Number(food.carbs ?? 0);
+      acc.fat += Number(food.fat ?? 0);
+      return acc;
+    },
+    { calories: 0, protein: 0, carbs: 0, fat: 0 },
+  );
+
   const handleCreateFood = () => {
     setEditingFood(undefined);
     setFoodModalOpen(true);
@@ -277,6 +289,36 @@ function DietaDetalle() {
                         </TableCell>
                       </TableRow>
                     ))}
+
+                    {/* Fila de totales */}
+                    <TableRow className="bg-gray-100">
+                      <TableCell className="font-semibold text-gray-800">
+                        Total
+                      </TableCell>
+                      <TableCell className="text-center text-gray-800">
+                        <span className="px-3 py-1 bg-yellow-100 rounded-full text-sm font-semibold">
+                          {totals.calories}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center text-gray-800">
+                        <span className="px-3 py-1 bg-blue-100 rounded-full text-sm font-semibold">
+                          {totals.protein}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center text-gray-800">
+                        <span className="px-3 py-1 bg-orange-100 rounded-full text-sm font-semibold">
+                          {totals.carbs}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center text-gray-800">
+                        <span className="px-3 py-1 bg-red-100 rounded-full text-sm font-semibold">
+                          {totals.fat}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-center text-gray-600">
+                        -
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </div>
