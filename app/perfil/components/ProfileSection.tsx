@@ -11,7 +11,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import { useUpdateUser } from "../hooks/users/useUpdateUser";
 import { useUsers } from "../hooks/users/useUser";
@@ -35,12 +34,22 @@ type FieldConfig = {
   icon: React.ReactNode;
   type: "input" | "select";
   options?: { value: string; label: string }[];
-  placeholder?: string;
   unit?: string;
 };
 
+const genderLabels: Record<string, string> = {
+  male: "Hombre",
+  female: "Mujer",
+};
+
+const activityLabels: Record<string, string> = {
+  LIGHT: "Ligera",
+  MODERATE: "Moderada",
+  INTENSE: "Intensa",
+};
+
 export default function ProfileSection() {
-  const { data, isLoading, isError, error } = useUsers();
+  const { data } = useUsers();
   const updateUser = useUpdateUser();
 
   const user: UserI | undefined = Array.isArray(data)
@@ -56,12 +65,10 @@ export default function ProfileSection() {
   });
 
   const [editField, setEditField] = useState<keyof ProfileData | null>(null);
-  const [savingField, setSavingField] = useState<keyof ProfileData | null>(
-    null,
-  );
 
   useEffect(() => {
     if (!user) return;
+
     setProfile({
       height: user.height != null ? String(user.height) : "",
       age: user.age != null ? String(user.age) : "",
@@ -77,7 +84,6 @@ export default function ProfileSection() {
 
   const save = async (key: keyof ProfileData) => {
     setEditField(null);
-    setSavingField(key);
 
     const payload: UpdatePayload = {};
 
@@ -87,41 +93,22 @@ export default function ProfileSection() {
 
     if (key === "gender") {
       payload.gender = profile.gender
-        ? (profile.gender.toLowerCase() as UserI["gender"])
+        ? (profile.gender as UserI["gender"])
         : null;
     }
 
     if (key === "weeklyActivity") {
       payload.weeklyActivity = profile.weeklyActivity
-        ? (profile.weeklyActivity.toUpperCase() as UserI["weeklyActivity"])
+        ? (profile.weeklyActivity as UserI["weeklyActivity"])
         : null;
     }
 
-    try {
-      await updateUser.mutateAsync(payload);
-    } catch (err) {
-      console.error("Error guardando:", err);
-      setEditField(key);
-    } finally {
-      setSavingField(null);
-    }
+    await updateUser.mutateAsync(payload);
   };
 
-  const display = (key: keyof ProfileData, value: string) => {
-    if (!value) return "-";
-
-    if (key === "gender") {
-      return value === "male" ? "Hombre" : value === "female" ? "Mujer" : value;
-    }
-
-    if (key === "weeklyActivity") {
-      if (value === "LIGHT") return "Ligera (1-3 días)";
-      if (value === "MODERATE") return "Moderada (3-5 días)";
-      if (value === "INTENSE") return "Intensa (6-7 días)";
-    }
-
-    return value;
-  };
+  /* =========================
+     CONFIG DE CAMPOS
+  ========================= */
 
   const fields: FieldConfig[] = [
     {
@@ -129,7 +116,6 @@ export default function ProfileSection() {
       label: "Altura",
       icon: <Ruler className="w-5 h-5 text-blue-600" />,
       type: "input",
-      placeholder: "cm",
       unit: "cm",
     },
     {
@@ -137,7 +123,6 @@ export default function ProfileSection() {
       label: "Edad",
       icon: <Calendar className="w-5 h-5 text-emerald-600" />,
       type: "input",
-      placeholder: "años",
       unit: "años",
     },
     {
@@ -145,7 +130,6 @@ export default function ProfileSection() {
       label: "Peso",
       icon: <Scale className="w-5 h-5 text-green-600" />,
       type: "input",
-      placeholder: "kg",
       unit: "kg",
     },
     {
@@ -160,7 +144,7 @@ export default function ProfileSection() {
     },
     {
       key: "weeklyActivity",
-      label: "Actividad Semanal",
+      label: "Actividad semanal",
       icon: <Activity className="w-5 h-5 text-orange-600" />,
       type: "select",
       options: [
@@ -171,100 +155,105 @@ export default function ProfileSection() {
     },
   ];
 
-  if (isLoading) return <div>Cargando perfil...</div>;
-  if (isError) return <div>Error: {error?.message}</div>;
-  if (!user) return <div>No se encontró usuario</div>;
-
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-teal-50/30 rounded-2xl border border-blue-100">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {fields.map((field) => {
-          const key = field.key;
-          const isEditing = editField === key;
-          const value = profile[key];
+    <div className="space-y-16">
+      <section>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          Datos personales
+        </h2>
 
-          return (
-            <div
-              key={key}
-              className="bg-white rounded-xl p-4 border border-blue-200"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  {field.icon}
-                  <Label>{field.label}</Label>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {fields.map((field) => {
+            const value = profile[field.key];
+            const isEditing = editField === field.key;
+
+            return (
+              <div
+                key={field.key}
+                className="border border-gray-200 rounded-2xl p-4"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    {field.icon}
+                    <Label className="text-sm">{field.label}</Label>
+                  </div>
+
+                  {!isEditing && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditField(field.key)}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                  )}
                 </div>
 
-                {!isEditing && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setEditField(key)}
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
-
-              {isEditing ? (
-                <>
-                  {field.type === "select" ? (
-                    <Select value={value} onValueChange={(v) => change(key, v)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {field.options?.map((o) => (
-                          <SelectItem key={o.value} value={o.value}>
-                            {o.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <div className="relative">
+                {isEditing ? (
+                  <>
+                    {field.type === "select" ? (
+                      <Select
+                        value={value}
+                        onValueChange={(v) => change(field.key, v)}
+                      >
+                        <SelectTrigger />
+                        <SelectContent>
+                          {field.options?.map((o) => (
+                            <SelectItem key={o.value} value={o.value}>
+                              {o.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
                       <Input
                         type="number"
                         value={value}
-                        onChange={(e) => change(key, e.target.value)}
-                        className="pr-12"
+                        onChange={(e) => change(field.key, e.target.value)}
                       />
-                      {field.unit && (
-                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500">
-                          {field.unit}
-                        </span>
-                      )}
+                    )}
+
+                    <div className="flex gap-2 mt-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setEditField(null)}
+                      >
+                        Cancelar
+                      </Button>
+                      <Button size="sm" onClick={() => save(field.key)}>
+                        Guardar
+                      </Button>
                     </div>
-                  )}
+                  </>
+                ) : (
+                  <p className="text-lg font-semibold text-gray-800">
+                    {(() => {
+                      if (!value) return "-";
+                      if (field.key === "gender")
+                        return genderLabels[value] ?? value;
+                      if (field.key === "weeklyActivity")
+                        return activityLabels[value] ?? value;
+                      return value;
+                    })()}
 
-                  <div className="flex gap-2 mt-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditField(null)}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button size="sm" onClick={() => save(key)}>
-                      Guardar
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <p className="text-xl font-semibold">
-                  {display(key, value)}
-                  {value && field.unit && (
-                    <span className="ml-1 text-sm text-gray-500">
-                      {field.unit}
-                    </span>
-                  )}
-                </p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                    {value && field.unit && (
+                      <span className="text-sm text-gray-500 ml-1">
+                        {field.unit}
+                      </span>
+                    )}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
-      <CaloriesCalculator profileData={profile} />
+      {/* CALORÍAS */}
+      <section>
+        <CaloriesCalculator profileData={profile} />
+      </section>
     </div>
   );
 }

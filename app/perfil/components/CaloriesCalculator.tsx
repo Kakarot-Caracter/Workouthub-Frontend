@@ -81,11 +81,11 @@ export default function CaloriesCalculator({ profileData }: Props) {
   const katchMcArdle = calculateKatchMcArdle();
   const mainBMR = mifflinStJeor;
   const maintenanceCalories = calculateTotalCalories(mainBMR);
-  const bulkCalories = maintenanceCalories + 350;
-  const cutCalories = maintenanceCalories - 400;
+  const bulkCalories = maintenanceCalories + 250;
+  const cutCalories = maintenanceCalories - 500;
 
   return (
-    <div className="w-full bg-gradient-to-br from-blue-50 to-teal-50/30 rounded-2xl border border-blue-100 p-4 md:p-6 lg:p-8 shadow-sm">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 md:gap-4 mb-6 md:mb-8">
         <div className="flex-shrink-0 p-2 md:p-3 bg-gradient-to-br from-blue-500 to-teal-500 rounded-xl shadow-md">
           <Zap className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -142,7 +142,7 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xl md:text-2xl lg:text-3xl font-bold text-green-700 break-words">
                   {bulkCalories.toLocaleString("es-ES")}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">+350 cal</div>
+                <div className="text-xs text-gray-500 mt-1">+250 cal</div>
               </div>
 
               <div className="w-full text-center p-3 md:p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg border border-orange-200">
@@ -152,7 +152,7 @@ export default function CaloriesCalculator({ profileData }: Props) {
                 <div className="text-xl md:text-2xl lg:text-3xl font-bold text-orange-700 break-words">
                   {cutCalories.toLocaleString("es-ES")}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">-400 cal</div>
+                <div className="text-xs text-gray-500 mt-1">-500 cal</div>
               </div>
             </div>
           </div>
