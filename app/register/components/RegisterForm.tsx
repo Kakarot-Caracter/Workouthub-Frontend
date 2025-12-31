@@ -117,7 +117,6 @@ const RegisterForm = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {[
                 "Rutinas personalizadas",
-                "Seguimiento de progreso",
                 "Comunidad activa",
                 "Soporte 24/7",
               ].map((feature, index) => (

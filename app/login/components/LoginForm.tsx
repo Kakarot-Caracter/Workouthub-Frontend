@@ -117,7 +117,6 @@ const LoginForm = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
               {[
                 "Rutinas personalizadas",
-                "Seguimiento de progreso",
                 "Comunidad activa",
                 "Soporte 24/7",
               ].map((feature, index) => (
@@ -203,7 +202,7 @@ const LoginForm = () => {
                     </div>
 
                     {serverError && (
-                      <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                      <div className="p-3 rounded-lg text-red-700 text-sm">
                         {serverError}
                       </div>
                     )}

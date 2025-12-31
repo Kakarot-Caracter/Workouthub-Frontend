@@ -129,7 +129,7 @@ export default function DietFormModal({
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, name: e.target.value }))
                 }
-                placeholder="Ej: Push Pull Legs"
+                placeholder="Ej: Dieta A, Dieta B, etc."
                 className="rounded-xl border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 disabled={isSubmitting}
                 required
