@@ -15,7 +15,6 @@ interface Props {
 }
 
 export default function CaloriesCalculator({ profileData }: Props) {
-  // FUNCIONALIDAD ORIGINAL - SIN CAMBIOS
   const height = parseInt(profileData.height, 10) || 0;
   const age = parseInt(profileData.age, 10) || 0;
   const weight = parseInt(profileData.weight, 10) || 0;
