@@ -81,15 +81,17 @@ function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuLabel>
-                      <Link href="/perfil">Mi Perfil</Link>
-                    </DropdownMenuLabel>
+                    <DropdownMenuLabel>Navegación</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/rutinas">Mis Rutinas</Link>
+                      <Link href="/rutinas">Rutinas</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/dietas">Mis Dietas</Link>
+                      <Link href="/dietas">Dietas</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/perfil">Mi perfil</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-600">
@@ -129,10 +131,10 @@ function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
                 <DropdownMenuLabel>Navegación</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/">Inicio</Link>
+                  <Link href="/rutinas">Rutinas</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/rutinas">Rutinas</Link>
+                  <Link href="/dietas">Dietas</Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
