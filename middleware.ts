@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 const PUBLIC_PAGES = ["/login", "/register"];
 
 // Páginas que requieren autenticación
-const PRIVATE_PAGES = ["/rutinas", "/perfil"];
+const PRIVATE_PAGES = ["/rutinas", "/perfil", "/", "/"];
 
 export function middleware(req: NextRequest) {
   // Leer cookie httpOnly
