@@ -1,6 +1,7 @@
+"use client";
+
 import { Dumbbell, LogOut, Menu, User } from "lucide-react";
 
-import { cookies } from "next/headers";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -12,11 +13,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
 
-export default async function Header() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth_token");
-  const isAuthenticated = Boolean(token?.value);
+export default function Header() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const match = document.cookie.match(/auth_token=/);
+    setIsAuthenticated(Boolean(match));
+  }, []);
 
   return <HeaderClient isAuthenticated={isAuthenticated} />;
 }
