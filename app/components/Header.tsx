@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Dumbbell, LogOut, Menu, User } from "lucide-react";
 import Link from "next/link";
