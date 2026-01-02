@@ -33,12 +33,12 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Configurar matcher
 export const config = {
   matcher: [
     "/login/:path*",
     "/register/:path*",
     "/rutinas/:path*", // protegemos /rutinas
     "/perfil/:path*", // protegemos /perfil
+    "/dietas/:path*",
   ],
 };
