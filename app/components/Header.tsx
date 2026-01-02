@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";import { Dumbbell, LogOut, Menu, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Dumbbell, LogOut, Menu, User } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,7 +22,6 @@ export default function Header() {
   }, []);
 
   return <HeaderClient isAuthenticated={isAuthenticated} />;
-}
 }
 
 function HeaderClient({ isAuthenticated }: { isAuthenticated: boolean }) {
