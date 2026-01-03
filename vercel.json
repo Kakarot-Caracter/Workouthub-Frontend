@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://initial-faythe-giovannim-8294c58f.koyeb.app/api/$1"
+    }
+  ]
+}
