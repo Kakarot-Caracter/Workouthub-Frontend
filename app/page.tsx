@@ -15,6 +15,10 @@ export default async function Home() {
       <Header />
       <main className="w-full">
         <Hero />
+        <p>
+          Welcome to WorkoutHub!{" "}
+          {user ? `Hello, ${user.name}!` : "Welcome, Guest!"}
+        </p>
         <KeyFeatures />
         <UsersTestimonials />
         <CallToAction />
