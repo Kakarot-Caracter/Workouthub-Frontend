@@ -12,12 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function Header() {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token");
   const isAuthenticated = Boolean(token?.value);
   console.log("Is authenticated:", isAuthenticated);
+  const user = await getCurrentUser();
+  console.log("User:", user);
 
   return <HeaderClient isAuthenticated={isAuthenticated} />;
 }
