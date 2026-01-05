@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 const PUBLIC_PAGES = ["/login", "/register"];
 
-const PRIVATE_PAGES = ["/rutinas", "/perfil", "/dietas"];
+const PRIVATE_PAGES = [""];
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
