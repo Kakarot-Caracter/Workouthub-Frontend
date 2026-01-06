@@ -14,11 +14,14 @@ import { useDiets } from "./hooks/diets/useDiet";
 import { useDeleteDiet } from "./hooks/diets/useDeleteDiet";
 import DietFormModal from "./components/DietFormModal";
 import DietCard from "./components/DietCard";
+import { PrivateRoute } from "@/lib/PrivateRoute";
 
 export default function RutinasPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RutinasContent />
+      <PrivateRoute>
+        <RutinasContent />
+      </PrivateRoute>
     </QueryClientProvider>
   );
 }
