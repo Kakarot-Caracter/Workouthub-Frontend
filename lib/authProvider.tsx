@@ -7,7 +7,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuth = useAuthStore((s) => s.checkAuth);
 
   useEffect(() => {
-    checkAuth();
+    if (typeof window !== "undefined") {
+      checkAuth();
+    }
   }, [checkAuth]);
 
   return <>{children}</>;
