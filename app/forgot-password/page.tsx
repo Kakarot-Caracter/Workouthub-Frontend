@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { API_URL } from "../shared/constants/url-api";
 
 const forgotPasswordSchema = z.object({
   email: z
@@ -46,7 +47,7 @@ const ForgotPasswordForm = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("http://localhost:3001/auth/forgot-password", {
+      const res = await fetch(`${API_URL}/auth/forgot-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email }),
