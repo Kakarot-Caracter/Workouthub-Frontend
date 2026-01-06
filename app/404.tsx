@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
-const Custom404 = () => {
+export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 text-center">
       <h1 className="text-6xl md:text-8xl font-extrabold text-gray-800 mb-4">
@@ -38,6 +38,4 @@ const Custom404 = () => {
       </div>
     </div>
   );
-};
-
-export default Custom404;
+}
