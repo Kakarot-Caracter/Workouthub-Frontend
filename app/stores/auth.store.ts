@@ -1,79 +1,69 @@
 "use client";
 
 import { create } from "zustand";
-import { API_URL } from "@/app/shared/constants/url-api";
-
-type User = { id: number; username: string; email: string };
+import { API_URL } from "../shared/constants/url-api";
 
 type AuthState = {
-  user: User | null;
-  isAuth: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  register: (
-    username: string,
-    email: string,
-    password: string,
-  ) => Promise<boolean>;
-  logout: () => Promise<void>;
+  isAuth: boolean | null;
+  user: { id: number; username: string; email: string } | null;
   checkAuth: () => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
+  isAuth: null,
   user: null,
-  isAuth: false,
 
-  login: async (email, password) => {
-    const res = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    });
+  checkAuth: async () => {
+    try {
+      const res = await fetch(`${API_URL}/user`, {
+        credentials: "include",
+      });
 
-    if (!res.ok) return false;
+      if (!res.ok) {
+        set({ isAuth: false, user: null });
+        return;
+      }
 
-    const user = await res.json();
-    set({ user, isAuth: true });
-    return true;
+      const user = await res.json();
+      set({ isAuth: true, user });
+    } catch (error) {
+      console.error("Error checking auth:", error);
+      set({ isAuth: false, user: null });
+    }
   },
 
-  register: async (username, email, password) => {
-    const res = await fetch(`${API_URL}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ username, email, password }),
-    });
+  login: async (email, password) => {
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!res.ok) return false;
+      if (!res.ok) return false;
 
-    const user = await res.json();
-    set({ user, isAuth: true });
-    return true;
+      const data = await res.json();
+      set({ isAuth: true, user: data.user });
+      return true;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
+    }
   },
 
   logout: async () => {
-    await fetch(`${API_URL}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
-    set({ user: null, isAuth: false });
-  },
-
-  checkAuth: async () => {
-    if (typeof window === "undefined") return;
-
-    const res = await fetch(`${API_URL}/auth/me`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!res.ok) {
-      set({ user: null, isAuth: false });
-      return;
+    try {
+      await fetch(`${API_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      set({ isAuth: false, user: null });
     }
-
-    const user = await res.json();
-    set({ user, isAuth: true });
   },
 }));
