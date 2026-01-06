@@ -18,6 +18,16 @@ export default function Header() {
 
   const isAuthenticated = isAuth === true;
 
+  if (isAuth === null) {
+    return (
+      <header className="w-full sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <div className="w-32 h-6 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+      </header>
+    );
+  }
+
   return (
     <header className="w-full sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
