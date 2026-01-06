@@ -59,6 +59,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   checkAuth: async () => {
+    if (typeof window === "undefined") return;
+
     const res = await fetch(`${API_URL}/auth/me`, {
       method: "GET",
       credentials: "include",
