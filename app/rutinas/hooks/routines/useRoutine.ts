@@ -1,4 +1,3 @@
-// hooks/routines/useRoutine.ts
 import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "@/app/shared/constants/url-api";
 import type { RoutineI } from "@/app/shared/types";

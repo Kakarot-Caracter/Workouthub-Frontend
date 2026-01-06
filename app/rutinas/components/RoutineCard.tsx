@@ -21,16 +21,15 @@ import {
 
 type RoutineCardProps = {
   routine: RoutineI;
-  onEdit: () => void;
-  onDelete: () => void;
+  onEditAction: () => void;
+  onDeleteAction: () => void;
 };
 
 export default function RoutineCard({
   routine,
-  onEdit,
-  onDelete,
+  onEditAction,
+  onDeleteAction,
 }: RoutineCardProps) {
-  // Función para truncar texto largo
   const truncateText = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + "...";
@@ -100,7 +99,7 @@ export default function RoutineCard({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      onEdit();
+                      onEditAction();
                     }}
                   >
                     <Edit className="w-4 h-4" />
@@ -120,7 +119,7 @@ export default function RoutineCard({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      onDelete();
+                      onDeleteAction();
                     }}
                   >
                     <Trash className="w-4 h-4" />
