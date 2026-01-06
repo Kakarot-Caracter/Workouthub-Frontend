@@ -54,7 +54,7 @@ const ResetPasswordForm = () => {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    if (!token) return; // seguridad extra
+    if (!token) return;
     setServerError(null);
     setIsSubmitting(true);
 
