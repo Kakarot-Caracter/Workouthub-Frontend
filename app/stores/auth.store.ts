@@ -7,33 +7,33 @@ type User = { id: number; username: string; email: string };
 
 type AuthState = {
   user: User | null;
-  isAuth: boolean | null;
+  isAuth: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (
     username: string,
     email: string,
     password: string,
   ) => Promise<boolean>;
-  logout: () => Promise<void>;
+  logout: () => void;
   checkAuth: () => Promise<void>;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isAuth: null,
+  isAuth: false,
 
   login: async (email, password) => {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({ email, password }),
     });
 
     if (!res.ok) return false;
 
-    const user = await res.json();
-    set({ user, isAuth: true });
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    set({ user: data.user, isAuth: true });
     return true;
   },
 
@@ -41,41 +41,46 @@ export const useAuthStore = create<AuthState>((set) => ({
     const res = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({ username, email, password }),
     });
 
     if (!res.ok) return false;
 
-    const user = await res.json();
-    set({ user, isAuth: true });
+    const data = await res.json();
+    localStorage.setItem("token", data.token);
+    set({ user: data.user, isAuth: true });
     return true;
   },
 
-  logout: async () => {
-    await fetch(`${API_URL}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    });
+  logout: () => {
+    localStorage.removeItem("token");
     set({ user: null, isAuth: false });
   },
 
   checkAuth: async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      set({ user: null, isAuth: false });
+      return;
+    }
+
     try {
-      const res = await fetch(`${API_URL}/user`, {
-        credentials: "include",
+      const res = await fetch(`${API_URL}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
-        set({ isAuth: false, user: null });
+        localStorage.removeItem("token");
+        set({ user: null, isAuth: false });
         return;
       }
 
       const user = await res.json();
-      set({ isAuth: true, user });
+      set({ user, isAuth: true });
     } catch (error) {
-      console.error("Error checking auth:", error);
-      set({ isAuth: false, user: null });
+      console.error(error);
+      localStorage.removeItem("token");
+      set({ user: null, isAuth: false });
     }
   },
 }));
