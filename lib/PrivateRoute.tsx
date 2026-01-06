@@ -9,10 +9,12 @@ export function PrivateRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuth === false) router.replace("/login");
+    if (isAuth === false) {
+      router.replace("/login");
+    }
   }, [isAuth]);
 
-  if (isAuth === null) return <div>Cargando...</div>;
+  if (isAuth === null) return null;
 
-  return <>{children}</>;
+  return children;
 }
