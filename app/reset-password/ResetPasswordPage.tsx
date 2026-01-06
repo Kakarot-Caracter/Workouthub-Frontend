@@ -35,8 +35,14 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ResetPasswordForm = () => {
   const params = useSearchParams();
-  const token = params.get("token") ?? "";
+  const token = params.get("token");
   const router = useRouter();
+
+  React.useEffect(() => {
+    if (!token) {
+      router.replace("/login");
+    }
+  }, [token, router]);
 
   const [success, setSuccess] = React.useState(false);
   const [serverError, setServerError] = React.useState<string | null>(null);
@@ -48,6 +54,7 @@ const ResetPasswordForm = () => {
   });
 
   const onSubmit = async (data: ResetPasswordFormData) => {
+    if (!token) return; // seguridad extra
     setServerError(null);
     setIsSubmitting(true);
 
@@ -73,6 +80,16 @@ const ResetPasswordForm = () => {
       setIsSubmitting(false);
     }
   };
+
+  if (!token) {
+    return (
+      <section className="w-full py-12 flex justify-center">
+        <p className="text-red-600 text-center">
+          Token inválido o expirado. Redirigiendo a login…
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full py-12 sm:py-16 md:py-20 px-4 sm:px-6 flex justify-center">
