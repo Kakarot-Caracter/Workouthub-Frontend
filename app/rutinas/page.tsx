@@ -39,7 +39,6 @@ function RutinasContent() {
 
   const routines: RoutineI[] = data?.routines || [];
 
-  console.log("routines", routines);
   const handleEdit = (routine: RoutineI) => {
     setEditingRoutine(routine);
     setOpen(true);
