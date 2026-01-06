@@ -35,12 +35,10 @@ function RutinasContent() {
 
   const { data, isLoading, error } = useDiets();
 
-  console.log("data", data);
   const deleteDiet = useDeleteDiet();
 
   const diets: DietI[] = data?.diets || [];
 
-  console.log("diets", diets);
   const handleEdit = (diet: DietI) => {
     setEditingDiet(diet);
     setOpen(true);
