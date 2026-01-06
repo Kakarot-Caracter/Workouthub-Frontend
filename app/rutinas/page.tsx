@@ -156,8 +156,8 @@ function RutinasContent() {
               <RoutineCard
                 key={routine.id}
                 routine={routine}
-                onEdit={() => handleEdit(routine)}
-                onDelete={() => handleDeleteClick(routine)}
+                onEditAction={() => handleEdit(routine)}
+                onDeleteAction={() => handleDeleteClick(routine)}
               />
             ))
           ) : (
