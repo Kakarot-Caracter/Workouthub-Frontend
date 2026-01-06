@@ -1,8 +1,5 @@
-"use client";
-
 import { Dumbbell, LogOut, Menu, User } from "lucide-react";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,10 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { useAuthStore } from "../stores/auth.store";
 
-export function Header() {
+export default function Header() {
   const { isAuth, logout } = useAuthStore();
 
   const isAuthenticated = isAuth === true;
@@ -41,19 +37,19 @@ export function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className="text-sm font-medium text-gray-600 hover:text-blue-600"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
             >
               Inicio
             </Link>
             <Link
               href="/rutinas"
-              className="text-sm font-medium text-gray-600 hover:text-blue-600"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
             >
               Rutinas
             </Link>
             <Link
               href="/dietas"
-              className="text-sm font-medium text-gray-600 hover:text-blue-600"
+              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
             >
               Dietas
             </Link>
@@ -64,11 +60,10 @@ export function Header() {
               <div className="hidden md:flex items-center gap-4">
                 <Link
                   href="/perfil"
-                  className="text-sm font-medium text-gray-600 hover:text-blue-600"
+                  className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
                 >
                   Mi Perfil
                 </Link>
-
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -79,30 +74,21 @@ export function Header() {
                       <User className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuLabel>Navegación</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-
                     <DropdownMenuItem asChild>
                       <Link href="/rutinas">Rutinas</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/dietas">Dietas</Link>
                     </DropdownMenuItem>
-
                     <DropdownMenuSeparator />
-
                     <DropdownMenuItem asChild>
                       <Link href="/perfil">Mi perfil</Link>
                     </DropdownMenuItem>
-
                     <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                      className="text-red-600 cursor-pointer"
-                      onClick={logout}
-                    >
+                    <DropdownMenuItem className="text-red-600">
                       <LogOut className="mr-2 h-4 w-4" />
                       Cerrar Sesión
                     </DropdownMenuItem>
@@ -111,28 +97,33 @@ export function Header() {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-3">
-                <Button variant="outline" size="sm" asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-gray-700 border-gray-300 hover:border-blue-400 hover:text-blue-600"
+                  asChild
+                >
                   <Link href="/login">Iniciar Sesión</Link>
                 </Button>
-
-                <Button size="sm" asChild>
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-600 to-teal-500 text-white hover:from-blue-700 hover:to-teal-600"
+                  asChild
+                >
                   <Link href="/register">Registrarse</Link>
                 </Button>
               </div>
             )}
 
-            {/* Mobile */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild className="md:hidden">
                 <Button variant="ghost" size="icon" className="h-9 w-9">
                   <Menu className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>
-
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>Navegación</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-
                 <DropdownMenuItem asChild>
                   <Link href="/rutinas">Rutinas</Link>
                 </DropdownMenuItem>
@@ -141,19 +132,13 @@ export function Header() {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-
                 {isAuthenticated ? (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/perfil">Mi Perfil</Link>
                     </DropdownMenuItem>
-
                     <DropdownMenuSeparator />
-
-                    <DropdownMenuItem
-                      className="text-red-600 cursor-pointer"
-                      onClick={logout}
-                    >
+                    <DropdownMenuItem className="text-red-600">
                       <LogOut className="mr-2 h-4 w-4" />
                       Cerrar Sesión
                     </DropdownMenuItem>

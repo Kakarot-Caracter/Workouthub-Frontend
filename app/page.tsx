@@ -4,8 +4,7 @@ import KeyFeatures from "./components/KeyFeatures";
 import UsersTestimonials from "./components/UsersTestimonials";
 import CallToAction from "./components/CallToAction";
 import Footer from "./components/Footer";
-import { Header } from "./components/Header";
-
+import Header from "./components/Header";
 export default async function Home() {
   return (
     <>
