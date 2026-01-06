@@ -1,3 +1,5 @@
+"use client";
+
 import { create } from "zustand";
 import { API_URL } from "@/app/shared/constants/url-api";
 
