@@ -14,16 +14,19 @@ import { useDiets } from "./hooks/diets/useDiet";
 import { useDeleteDiet } from "./hooks/diets/useDeleteDiet";
 import DietFormModal from "./components/DietFormModal";
 import DietCard from "./components/DietCard";
+import ProtectedRoute from "@/lib/ProtectedRoute";
 
-export default function RutinasPage() {
+export default function DietasPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RutinasContent />
+      <ProtectedRoute>
+        <DietasContent />
+      </ProtectedRoute>
     </QueryClientProvider>
   );
 }
 
-function RutinasContent() {
+function DietasContent() {
   const [open, setOpen] = useState(false);
   const [editingDiet, setEditingDiet] = useState<DietI | undefined>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
