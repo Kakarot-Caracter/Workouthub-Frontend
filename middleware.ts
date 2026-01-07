@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 
 export default function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
+  alert("Middleware ejecutado:");
+
+  alert(token);
+
   const { pathname } = request.nextUrl;
 
   // Log simple
