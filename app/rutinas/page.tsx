@@ -13,11 +13,14 @@ import RoutineCard from "./components/RoutineCard";
 import RoutineFormModal from "./components/RoutineFormModal";
 import { useDeleteRoutine } from "./hooks/routines/useDeleteRoutine";
 import { useRoutines } from "./hooks/routines/useRoutine";
+import ProtectedRoute from "@/lib/ProtectedRoute";
 
 export default function RutinasPage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RutinasContent />
+      <ProtectedRoute>
+        <RutinasContent />
+      </ProtectedRoute>
     </QueryClientProvider>
   );
 }
