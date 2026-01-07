@@ -14,9 +14,9 @@ import {
 import { useAuthStore } from "../stores/auth.store";
 
 export default function Header() {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
-  const isAuthenticated = false;
+  const isAuthenticated = !!user;
 
   return (
     <header className="w-full sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur-md">

@@ -51,9 +51,9 @@ const RegisterForm = () => {
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
+      username: "Giovanni",
+      email: "itachimartinez0@gmail.com",
+      password: "MADARA12345",
     },
   });
 
