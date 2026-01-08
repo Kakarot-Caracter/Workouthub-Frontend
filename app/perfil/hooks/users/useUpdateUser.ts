@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API_URL } from "@/app/shared/constants/url-api";
-import { UserI } from "@/app/shared/types";
+import type { UserI } from "@/app/shared/types";
 
 export type UpdateUser = Partial<
   Pick<
@@ -15,10 +15,14 @@ export type UpdateUser = Partial<
   >
 >;
 
+type UpdateContext = {
+  previousUser?: UserI;
+};
+
 export const useUpdateUser = () => {
   const qc = useQueryClient();
 
-  return useMutation<UserI, Error, UpdateUser>({
+  return useMutation<UserI, Error, UpdateUser, UpdateContext>({
     mutationFn: async (payload) => {
       const res = await fetch(`${API_URL}/user`, {
         method: "PATCH",
@@ -34,18 +38,26 @@ export const useUpdateUser = () => {
 
       return res.json();
     },
-    onSuccess: (updatedUser) => {
-      // Actualiza la cache ["user"] para que componentes que usan useUsers
-      qc.setQueryData(["user"], (oldData: unknown) => {
-        if (!oldData) return [updatedUser];
-        if (Array.isArray(oldData)) {
-          return oldData.map((u: UserI) =>
-            u.id === updatedUser.id ? updatedUser : u,
-          );
-        }
-        return updatedUser;
-      });
 
+    onMutate: async (payload) => {
+      await qc.cancelQueries({ queryKey: ["user"] });
+
+      const previousUser = qc.getQueryData<UserI>(["user"]);
+
+      qc.setQueryData<UserI>(["user"], (old) =>
+        old ? { ...old, ...payload } : old,
+      );
+
+      return { previousUser };
+    },
+
+    onError: (_err, _payload, ctx) => {
+      if (ctx?.previousUser) {
+        qc.setQueryData(["user"], ctx.previousUser);
+      }
+    },
+
+    onSettled: () => {
       qc.invalidateQueries({ queryKey: ["user"] });
     },
   });
